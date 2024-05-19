@@ -252,6 +252,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         if index == 0: # same max agent for the pacman
             return max((self.expectimax(gameState.generateSuccessor(index, action), nextDepth, nextIndex)[0], action) for action in actions)
         else: #expectation agent for the ghost 
+            #calculate the sum of expectimax value of possible actions for the ghost
             expectation = sum((self.expectimax(gameState.generateSuccessor(index, action), nextDepth, nextIndex)[0]) for action in actions)
             expectation /= len(actions)
             return expectation, None
