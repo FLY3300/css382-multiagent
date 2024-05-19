@@ -76,12 +76,12 @@ class ReflexAgent(Agent):
         "*** YOUR CODE HERE ***"
         score = successorGameState.getScore()
 
-        # moving toward the foods 
+        # calculate the food distance and letting the pacman moving toward the foods 
         foodDistance = [manhattanDistance(newPos, food) for food in newFood.asList()]
         if foodDistance:
             score += 1.0/min(foodDistance) #letting the pacman moving twoard the most closest food 
 
-        #move away from the ghost
+        # calculate teh ghost distance and letting the pacman move away from the ghost
         ghostDistance = [manhattanDistance(newPos, ghost.getPosition()) for ghost in newGhostStates]
         if ghostDistance and min(ghostDistance) < 2 :   #if the pacman has the distance that is less than 2 to the ghost
             score -= 200        #subtract a large value of score to allow the pacman moving away from the ghost
@@ -183,9 +183,11 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         return action
 
     def alphaBetaPruning(self, gameState, depth, index, alpha, beta):
+        #recursion check if the game is over, it would evaluate the game state using the evaluationFunction and return the result of the game 
         if gameState.isWin() or gameState.isLose() or depth == self.depth:
             return self.evaluationFunction(gameState), None
         
+        #get the next agent index and the depth
         nextIndex = (index + 1) % gameState.getNumAgents()
         nextDepth = depth
 
@@ -233,14 +235,18 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         return action
     
     def expectimax(self, gameState, depth, index):
+        #recursion check if the game is over, it would evaluate the game state using the evaluationFunction and return the result of the game 
         if gameState.isWin() or gameState.isLose() or depth == self.depth:
-            return self.evaluationFunction(gameState), None
+             return self.evaluationFunction(gameState), None
         
+        #get the next agent index and the depth
         nextIndex = (index + 1) % gameState.getNumAgents()
         nextDepth = depth
 
         if nextIndex == 0:
             nextDepth += 1
+
+        #get the legal action form the current agen can take from the current game state 
         actions = gameState.getLegalActions(index)
 
         if index == 0: # same max agent for the pacman
@@ -270,6 +276,7 @@ def betterEvaluationFunction(currentGameState):
     #checks the distance for the cloest food
     foodDistances = [util.manhattanDistance(position, foodPosition) for foodPosition in food.asList()]
 
+    #check the length to see if the food distances is greater then 0
     if len(foodDistances) > 0:
         score += 10.0 / min(foodDistances)
     else:
