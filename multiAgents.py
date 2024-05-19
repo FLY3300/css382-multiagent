@@ -152,9 +152,11 @@ class MinimaxAgent(MultiAgentSearchAgent):
     
     #the function would return a pair minimax value and action
     def minimax(self, gameState, depth, index):
+        #recursion check if the game is over, it would evaluate the game state using the evaluationFunction and return the result of the game 
         if gameState.isWin() or gameState.isLose() or depth == self.depth:
             return self.evaluationFunction(gameState), None
         
+        #get the next agent index and the depth
         nextIndex = (index + 1) % gameState.getNumAgents()
         nextDepth = depth
 
@@ -202,7 +204,6 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                     return value, betterAction
                 alpha = max(alpha, value) #alpha = max (a,v)
             return value, betterAction
-        
         else: #beta (min best option on path to root)
             value = float('inf') #initialize v = +∞
             for action in actions: # for each successor of state
@@ -263,8 +264,8 @@ def betterEvaluationFunction(currentGameState):
     ghostState = currentGameState.getGhostStates()
     score = currentGameState.getScore()
 
-    # Infinite value
-    INF = -float('inf')
+    # CONST negative infinite value
+    INFINITE = -float('inf')
 
     #checks the distance for the cloest food
     foodDistances = [util.manhattanDistance(position, foodPosition) for foodPosition in food.asList()]
@@ -284,7 +285,7 @@ def betterEvaluationFunction(currentGameState):
             else:
                 score += (-10) / dis
         else:
-            return INF
+            return INFINITE
     
     return score
 
